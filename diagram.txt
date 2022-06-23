@@ -1,0 +1,57 @@
+# https://www.websequencediagrams.com/
+
+IOT<-->Service: Handshake
+
+IOT->Service: Formal service request
+Service-->IOT: Processing
+
+note over Service:
+    - Find nearest edge device.
+    - Use straight line distance?
+end note
+
+Service->Edge: Alive?
+Edge-->Service: Yes
+
+Service->Contract: Instantiate smart contract
+Contract-->Service: OK
+
+note over Service:
+    - Reserve channel.
+    - Generate secret.
+end note
+
+Service->Edge: Details
+Service->IOT: Details
+
+IOT<-->Edge: Handshake
+
+loop
+    note over IOT:
+        - Produce log batch.
+        - Encrypt it.
+        - Generate log hash.
+    end note
+    
+    IOT->Contract: Write log hash to chain
+    Contract-->IOT: OK
+    
+    IOT->Edge: Send encrypted logs + hash
+    Edge-->IOT: OK
+    
+    note over Edge:
+        - Decrypt batch.
+        - Hash content.
+        - Compare hashes.
+    end note
+    
+    Edge->Contract: Verify hash
+    Contract-->Edge: OK
+    
+    note over Edge:
+        Process batch.
+    end note
+    
+    Edge->Storage: Store processed logs.
+    Storage-->Edge: OK
+end
