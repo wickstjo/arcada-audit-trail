@@ -1,27 +1,37 @@
 import utils
 
 class service_worker:
-    def __init__(self, params={}):
-        utils.log('SERVICE STARTED..')
+    def __init__(self):
+        utils.log('SERVICE WORKER STARTED..')
 
         # LOAD WORKER CONFIG FROM YAML
         self.config = utils.load_yaml('config.yml').service
 
-        # CREATE RABBIT INSTANCE & INIT CHANNELS
-        self.rabbit = utils.rabbit_instance(
-            self.config.channels
-        )
+        # CREATE RABBIT INSTANCE
+        self.rabbit = utils.rabbit_instance()
 
         # SUBSCRIBE TO MESSAGES
         self.rabbit.consume(
-            self.config.channels[0],
+            self.config.channel,
             self.callback
         )
 
     # HANDLE INCOMING MESSAGES
     def callback(self, channel, method, properties, body):
-        print('callback')
-        print(body)
+        decoded = utils.decode_data(body)
+        utils.log('RECEIVED MESSAGE')
+
+        # IF THE BODY CAN BE DECODED
+        if (decoded):
+            print(decoded)
+
+            # TODO: DECRYPT PAYLOAD
+            # TODO: CHECK STATE FOR SOURCE CONNECTION
+
+        
+        # OTHERWISE, PRINT ERROR
+        else:
+            utils.log('COULD NOT DECIPHER PAYLOAD')
 
 # BOOT UP WORKER
 utils.launch(service_worker)

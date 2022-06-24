@@ -8,3 +8,16 @@ services:
         ports:
             - 5672:5672
             - 15672:15672
+
+    # # SERVICE WORKER
+    # service_worker:
+    #     build:
+    #         dockerfile: worker.dockerfile
+    #         context: .
+    #     environment:
+    #         - WORKER_TYPE=parser
+    #     restart: always
+    #     volumes:
+    #         - ./tenant-parsers/:/tenant-parsers
+    #         - ./ingestion/:/ingestion
+    #         - ./workers/:/workers

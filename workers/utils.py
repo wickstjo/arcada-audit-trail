@@ -4,9 +4,10 @@ import json
 from datetime import datetime
 import base64
 import hashlib
+import secrets
 
 class rabbit_instance:
-    def __init__(self, channels):
+    def __init__(self):
 
         # ESTABLISH CONNECTION
         rabbitmq = pika.BlockingConnection(pika.ConnectionParameters(
@@ -17,12 +18,11 @@ class rabbit_instance:
         # ATTACH MQ CHANNEL
         self.channel = rabbitmq.channel()
 
-        # INITIALIZE MQ CHANNELS
-        for channel in channels:
-            self.channel.queue_declare(queue=channel)
-
     # CONSUME CHANNEL EVENTS
     def consume(self, channel, callback):
+
+        # INITIALIZE THE CHANNEL
+        self.channel.queue_declare(queue=channel)
         
         # SETUP CALLBACK
         self.channel.basic_consume(
@@ -30,6 +30,8 @@ class rabbit_instance:
             on_message_callback=callback,
             auto_ack=True
         )
+
+        log('JOINED CHANNEL: ' + channel)
 
         # SUBSCRIBE TO TOPIC
         self.channel.start_consuming()
@@ -42,11 +44,15 @@ class rabbit_instance:
             body=payload
         )
 
+        log('PUSHED MESSAGE TO: ' + channel)
+        
 # LOAD YAML DATA
 def load_yaml(path):
     with open(path, mode='r') as file:
-        return prettify_dict(yaml.load(file, Loader=yaml.FullLoader))
+        data = yaml.load(file, Loader=yaml.FullLoader)
+        return prettify_dict(data)
 
+# WRAP DICT INTO A EASIER TO USE CLASS
 class prettify_dict:
     def __init__(self, data_dict):
         self.data_dict = data_dict
@@ -83,15 +89,16 @@ def generate_hash(data):
 
 # DECODE PAYLOAD
 def decode_data(data):
-    to_bytes = base64.b64decode(data)
     
-    # ATTEMPT TO BASE AS DICT
+    # ATTEMPT TO DECODE
     try:
-        return json.loads(to_bytes)
+        to_bytes = base64.b64decode(data)
+        data = json.loads(to_bytes)
+        return prettify_dict(data)
     
-    # OTHERWISE, RETURN AS STRING
+    # IF IT FAILS, RETURN NULL
     except:
-        return to_bytes.decode('UTF-8')
+        return None
 
 # FORMATTED PRINT FUNC
 def log(msg):
@@ -106,3 +113,7 @@ def launch(worker):
     except KeyboardInterrupt:
         print()
         log('MANUALLY KILLED WORKER..')
+
+# GENERATE RANDOM BITS OF DATA
+def create_secret():
+    return secrets.token_hex(nbytes=16)

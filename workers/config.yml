@@ -1,18 +1,18 @@
 # SERVICE WORKER
 service:
+    channel: service
     keys:
         public: foo
         private: bar
-    channels:
-        - service
-        - edges
-        - other
 
 # EDGE WORKER
 edge:
     keys:
         public: biz
         private: baz
-    channels:
-        - edges
-        - service
+
+# IOT WORKER
+iot:
+    keys:
+        public: biz
+        private: baz

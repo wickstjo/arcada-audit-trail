@@ -1,15 +1,27 @@
 import utils
 
-class create_edge:
+class edge_worker:
     def __init__(self):
-        log('EDGE STARTED..')
+        utils.log('EDGE WORKER STARTED..')
 
-        self.rabbit = utils.rabbit_instance(['injectors', 'logging'])
-        self.rabbit.consume('injectors', self.callback)
+        # LOAD WORKER CONFIG FROM YAML
+        self.config = utils.load_yaml('config.yml').edge
 
-    # ON WORK ASSIGNMENT.. 
+        # CREATE RABBIT INSTANCE & INIT CHANNELS
+        self.rabbit = utils.rabbit_instance(
+            self.config.channels
+        )
+
+        # SUBSCRIBE TO MESSAGES
+        self.rabbit.consume(
+            self.config.channels[0],
+            self.callback
+        )
+
+    # HANDLE INCOMING MESSAGES
     def callback(self, channel, method, properties, body):
         print('callback')
+        print(body)
 
-# BOOT UP
-create_edge()
+# BOOT UP WORKER
+utils.launch(edge_worker)
