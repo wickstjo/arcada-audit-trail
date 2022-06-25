@@ -1,44 +1,40 @@
-import utils
+from utils.worker import skeleton, launch
+from utils.misc import log, create_secret
 
-class iot_worker:
-    def __init__(self):
-        utils.log('IOT WORKER STARTED..')
+class iot_worker(skeleton):
+    def created(self):
+        log('IOT WORKER STARTED..')
 
-        # LOAD WORKER CONFIG FROM YAML
-        config = utils.load_yaml('config.yml')
+        # WHITELISTED CALLBACK ACTIONS
+        self.actions = {
+            'iot-connect': self.iot_connect,
+        }
 
-        # SAVE RELEVANT INFO
-        self.config = config.iot
-        self.service_channel = config.service.channel
-
-        # CREATE RABBIT INSTANCE & MAKE SERVICE QUERY
-        self.rabbit = utils.rabbit_instance()
+        # RUN SERVICE QUERY
         self.service_query()
 
     # START CONNECTION PROCESS
     def service_query(self):
 
-        # CREATE NEW CHANNEL FOR RESPONSE
-        response_channel = utils.create_secret()
+        # RELEVANT CHANNELS
+        target_channel = self.config.service.channel
+        response_channel = create_secret()
 
-        # ENCODE DATASET
-        message = utils.encode_data({
-            'source': self.config.keys.public,
+        # CREATE & ENCODE MESSAGE
+        message = self.encode_data({
+            'source': self.config.iot.keys.public,
             'payload': {
-                'type': 'iot-connect',
+                'action': 'iot-connect',
                 'channel': response_channel
             }
         })
 
-        # PUBLISH MESSAGE & SUBSCRIBE TO RESPONSE CHANNEL
-        self.rabbit.publish(self.service_channel, message)
-        self.rabbit.consume(response_channel, self.callback)
+        # PUBLISH & SUBSCRIBE
+        self.publish(target_channel, message)
+        self.subscribe(response_channel, self.action)
 
-    # HANDLE INCOMING MESSAGES
-    def callback(self, channel, method, properties, body):
-        utils.log('RECEIVED MESSAGE')
-        print('callback')
-        print(body)
+    def iot_connect(self, data):
+        log('iot-connect')
 
 # BOOT UP WORKER
-utils.launch(iot_worker)
+launch(iot_worker)

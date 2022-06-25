@@ -1,37 +1,25 @@
-import utils
+from utils.worker import skeleton, launch
+from utils.misc import log
 
-class service_worker:
-    def __init__(self):
-        utils.log('SERVICE WORKER STARTED..')
+class service_worker(skeleton):
+    def created(self):
+        log('SERVICE WORKER STARTED..')
 
-        # LOAD WORKER CONFIG FROM YAML
-        self.config = utils.load_yaml('config.yml').service
-
-        # CREATE RABBIT INSTANCE
-        self.rabbit = utils.rabbit_instance()
+        # WHITELISTED CALLBACK ACTIONS
+        self.actions = {
+            'iot-connect': self.iot_connect,
+            'edge-connect': self.edge_connect
+        }
 
         # SUBSCRIBE TO MESSAGES
-        self.rabbit.consume(
-            self.config.channel,
-            self.callback
-        )
+        target_channel = self.config.service.channel
+        self.subscribe(target_channel, self.action)
 
-    # HANDLE INCOMING MESSAGES
-    def callback(self, channel, method, properties, body):
-        decoded = utils.decode_data(body)
-        utils.log('RECEIVED MESSAGE')
+    def iot_connect(self, data):
+        print('iot-conASDASDASDnect')
 
-        # IF THE BODY CAN BE DECODED
-        if (decoded):
-            print(decoded)
-
-            # TODO: DECRYPT PAYLOAD
-            # TODO: CHECK STATE FOR SOURCE CONNECTION
-
-        
-        # OTHERWISE, PRINT ERROR
-        else:
-            utils.log('COULD NOT DECIPHER PAYLOAD')
+    def edge_connect(self, data):
+        print('edge-connect')
 
 # BOOT UP WORKER
-utils.launch(service_worker)
+launch(service_worker)
