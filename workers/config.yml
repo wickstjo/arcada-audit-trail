@@ -2,14 +2,14 @@
 service:
     channel: service
     keys:
-        public: foo
-        private: bar
+        public: service-public
+        private: service-private
 
 # EDGE WORKER
 edge:
     keys:
-        public: biz
-        private: baz
+        public: edge-public
+        private: edge-private
 
 # IOT WORKER
 iot:

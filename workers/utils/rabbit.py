@@ -19,8 +19,8 @@ class create_instance:
         # INITIALIZE THE CHANNEL
         self.channel.queue_declare(queue=channel)
         
-        # SETUP CALLBACK
-        self.channel.basic_consume(
+        # SETUP CALLBACK & SAVE CONSUMER TAG FOR LATER
+        self.consumer_tag = self.channel.basic_consume(
             queue=channel,
             on_message_callback=callback,
             auto_ack=True
@@ -37,3 +37,6 @@ class create_instance:
             body=payload
         )
         
+    def unsub(self, channel):
+        # print(self.channel.consumer_tags)
+        self.channel.basic_cancel(self.consumer_tag)

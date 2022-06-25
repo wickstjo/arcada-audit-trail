@@ -4,6 +4,7 @@ from utils.misc import log
 class service_worker(skeleton):
     def created(self):
         log('SERVICE WORKER STARTED..')
+        self.config = self.config.service
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -12,11 +13,11 @@ class service_worker(skeleton):
         }
 
         # SUBSCRIBE TO MESSAGES
-        target_channel = self.config.service.channel
-        self.subscribe(target_channel, self.action)
+        self.subscribe(self.config.channel)
 
     def iot_connect(self, data):
         print('iot-conASDASDASDnect')
+        self.unsub(self.config.channel)
 
     def edge_connect(self, data):
         print('edge-connect')

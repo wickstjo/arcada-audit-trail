@@ -24,14 +24,14 @@ class skeleton:
         log('PUSHED MESSAGE TO: ' + channel)
 
     # SUBSCRIBE TO RABBIT FEED
-    def subscribe(self, channel, followup):
+    def subscribe(self, channel):
         def callback(channel, method, properties, body):
             log('RECEIVED MESSAGE')
             decoded = self.decode_data(body)
 
             # IF DECODING PROCESS WORKER OUT, CALL NEXT FUNC            
             if decoded:
-                followup(decoded)
+                self.action(decoded)
                 return
             
             # OTHERWISE, PRINT ERROR
@@ -39,6 +39,9 @@ class skeleton:
 
         log('JOINED CHANNEL: ' + channel)
         self.rabbit.consume(channel, callback)
+
+    def unsub(self, channel):
+        self.rabbit.unsub(channel)
 
     # ENCODE PAYLOAD
     def encode_data(self, data):

@@ -4,6 +4,8 @@ from utils.misc import log, create_secret
 class iot_worker(skeleton):
     def created(self):
         log('IOT WORKER STARTED..')
+        self.service_channel = self.config.service.channel
+        self.config = self.config.iot
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -16,13 +18,12 @@ class iot_worker(skeleton):
     # START CONNECTION PROCESS
     def service_query(self):
 
-        # RELEVANT CHANNELS
-        target_channel = self.config.service.channel
+        # GENERATE RESPONSE CHANNEL
         response_channel = create_secret()
 
         # CREATE & ENCODE MESSAGE
         message = self.encode_data({
-            'source': self.config.iot.keys.public,
+            'source': self.config.keys.public,
             'payload': {
                 'action': 'iot-connect',
                 'channel': response_channel
@@ -30,8 +31,8 @@ class iot_worker(skeleton):
         })
 
         # PUBLISH & SUBSCRIBE
-        self.publish(target_channel, message)
-        self.subscribe(response_channel, self.action)
+        self.publish(self.service_channel, message)
+        self.subscribe(response_channel)
 
     def iot_connect(self, data):
         log('iot-connect')
