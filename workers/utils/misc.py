@@ -2,6 +2,7 @@ import yaml
 import json
 from datetime import datetime
 import secrets
+import time
 
 # LOAD YAML DATA
 def load_yaml(path):
@@ -33,3 +34,6 @@ def log(msg):
 # GENERATE RANDOM BITS OF DATA
 def create_secret(prefix=''):
     return secrets.token_hex(nbytes=16)
+
+def sleep(seconds):
+    time.sleep(seconds)

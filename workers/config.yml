@@ -14,5 +14,5 @@ edge:
 # IOT WORKER
 iot:
     keys:
-        public: biz
-        private: baz
+        public: iot-public
+        private: iot-private

@@ -1,27 +1,48 @@
-import utils
+from utils.worker import skeleton, launch
+from utils.misc import log, create_secret
 
-class edge_worker:
-    def __init__(self):
-        utils.log('EDGE WORKER STARTED..')
+class iot_worker(skeleton):
+    def created(self):
+        log('EDGE WORKER STARTED..')
+        self.service = self.config.service
+        self.config = self.config.edge
 
-        # LOAD WORKER CONFIG FROM YAML
-        self.config = utils.load_yaml('config.yml').edge
+        # WHITELISTED CALLBACK ACTIONS
+        self.actions = {
+            'log_exchange': self.log_exchange,
+        }
 
-        # CREATE RABBIT INSTANCE & INIT CHANNELS
-        self.rabbit = utils.rabbit_instance(
-            self.config.channels
-        )
+        # RUN SERVICE QUERY
+        self.service_query()
 
-        # SUBSCRIBE TO MESSAGES
-        self.rabbit.consume(
-            self.config.channels[0],
-            self.callback
-        )
+    # START CONNECTION PROCESS
+    def service_query(self):
 
-    # HANDLE INCOMING MESSAGES
-    def callback(self, channel, method, properties, body):
-        print('callback')
-        print(body)
+        # GENERATE RESPONSE CHANNEL
+        response_channel = create_secret()
+
+        # CREATE & ENCODE MESSAGE
+        message = self.encode_data({
+            'source': self.config.keys.public,
+            'payload': {
+                'encryption': {
+                    'public': self.service.keys.public,
+                    'private': self.config.keys.private
+                },
+                'action': 'iot_handshake',
+                'channel': response_channel
+            }
+        })
+
+        # PUBLISH MSG TO SERVICE CHANNEL
+        self.publish(self.service.channel, message)
+        self.leave(self.service.channel)
+
+        # SUBSCRIBE TO RESPONSE CHANNEL
+        self.subscribe(response_channel)
+
+    def log_exchange(self, data):
+        print(data)
 
 # BOOT UP WORKER
-utils.launch(edge_worker)
+launch(iot_worker)

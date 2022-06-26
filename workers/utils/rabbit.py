@@ -31,12 +31,13 @@ class create_instance:
 
     # PUBLISH CHANNEL EVENT
     def publish(self, channel, payload):
-        self.channel.basic_publish(
+        self.consumer_tag = self.channel.basic_publish(
             exchange='',
             routing_key=channel,
             body=payload
         )
-        
-    def unsub(self, channel):
+    
+    # LEAVE CHANNEL
+    def cancel(self, channel):
         # print(self.channel.consumer_tags)
         self.channel.basic_cancel(self.consumer_tag)
