@@ -29,7 +29,12 @@ class iot_worker(skeleton):
                     'public': self.service.keys.public,
                     'private': self.config.keys.private
                 },
-                'action': 'iot_handshake',
+                'location': {
+                    'x': 5,
+                    'y': 1
+                },
+                'task': 'log_audit',
+                'action': 'edge_handshake',
                 'channel': response_channel
             }
         })

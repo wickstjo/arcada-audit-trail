@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import secrets
 import time
+import math
 
 # LOAD YAML DATA
 def load_yaml(path):
@@ -25,6 +26,9 @@ class prettify_dict:
     def __str__(self):
         return json.dumps(self.data_dict, indent=2)
 
+    def raw(self):
+        return self.data_dict
+
 # FORMATTED PRINT FUNC
 def log(msg):
     now = datetime.now().strftime("%H:%M:%S:%f")
@@ -35,5 +39,13 @@ def log(msg):
 def create_secret(prefix=''):
     return secrets.token_hex(nbytes=16)
 
+# SLEEP FOR X SECONDS
 def sleep(seconds):
     time.sleep(seconds)
+
+# COMPUTE STRAIGHT LINE DISTANCE
+def straight_distance(edge, iot):
+    foo = abs(iot.x - edge.location.x)**2
+    bar = abs(iot.y - edge.location.y)**2
+
+    return math.sqrt(foo + bar)
