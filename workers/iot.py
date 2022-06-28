@@ -1,53 +1,64 @@
 from utils.worker import skeleton, launch
-from utils.misc import log, create_secret
+from utils.misc import log, create_secret, sleep
+import random
 
 class iot_worker(skeleton):
     def created(self):
         log('IOT WORKER STARTED..')
-        self.service = self.config.service
-        self.config = self.config.iot
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
-            'log_exchange': self.log_exchange,
+            'add_link': self.add_link,
         }
 
-        # RUN SERVICE QUERY
+        # RUN SERVICE QUERY & SUBSCRIBE TO IOT CHANNEL
         self.service_query()
+        self.subscribe(self.config.iot.public)
 
     # START CONNECTION PROCESS
     def service_query(self):
 
-        # GENERATE RESPONSE CHANNEL
-        response_channel = create_secret()
+        # PUBLISH MSG TO SERVICE CHANNEL
+        service_channel = self.config.service.public
 
-        # CREATE & ENCODE MESSAGE
-        message = self.encode_data({
-            'source': self.config.keys.public,
+        self.publish(service_channel, {
+            'source': self.config.iot.public,
             'payload': {
-                'encryption': {
-                    'public': self.service.keys.public,
-                    'private': self.config.keys.private
-                },
-                'location': {
-                    'x': 8,
-                    'y': 5
-                },
-                'task': 'log_audit',
                 'action': 'iot_handshake',
-                'channel': response_channel
+                'location': self.config.iot.location.raw()
             }
         })
 
-        # PUBLISH MSG TO SERVICE CHANNEL
-        self.publish(self.service.channel, message)
-        self.leave(self.service.channel)
+    # FIND EDGE RESPONSE
+    def add_link(self, data):
 
-        # SUBSCRIBE TO RESPONSE CHANNEL
-        self.subscribe(response_channel)
+        # IF EVERYTHING WENT OK
+        if data.payload.success:
+            log('LINKED WITH EDGE:\t' + data.payload.edge.channel)
 
-    def log_exchange(self, data):
-        log(data)
+            for _ in range(5):
+                sleep(5)
+                self.dump_logs(data.payload.edge.channel)
+
+        # OTHERWISE, RENDER ERROR
+        else:
+            log('ERROR:\t\t' + data.payload.reason)
+            # log('TRYING AGAIN IN 5 SECONDS')
+            # sleep(5)
+            # self.service_query()
+
+    def dump_logs(self, edge):
+        rows = random.randint(3, 30)
+
+        self.publish(edge, {
+            'source': self.config.iot.public,
+            'payload': {
+                'action': 'log_dump',
+                'logs': [create_secret() for x in range(rows)]
+            }
+        })
+
+        log('DUMPED LOGS:\t\t{} ROWS'.format(rows))
 
 # BOOT UP WORKER
 launch(iot_worker)

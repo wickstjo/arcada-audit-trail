@@ -1,52 +1,37 @@
+import math
 from utils.worker import skeleton, launch
-from utils.misc import log, create_secret, straight_distance, prettify_dict
+from utils.misc import log, create_secret, prettify_dict
 
 class service_worker(skeleton):
     def created(self):
         log('SERVICE WORKER STARTED..')
-        self.edge = self.config.edge
-        self.config = self.config.service
+        self.state.edges = {}
 
-        # REGISTGERED EDGES
-        self.edges = {}
+        print(create_secret())
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
+            'edge_handshake': self.edge_handshake,
             'iot_handshake': self.iot_handshake,
-            'edge_handshake': self.edge_handshake
         }
 
-        # SUBSCRIBE TO MESSAGES
-        self.subscribe(self.config.channel)
+        # SUBSCRIBE TO SERVICE CHANNEL
+        self.subscribe(self.config.service.public)
 
     # PERFORM EDGE HANDSHAKE
     def edge_handshake(self, data):
 
-        # GENERATE RESPONSE CHANNEL
-        response_channel = create_secret()
+        # SAVE EDGE COORDINATES IN STATE
+        self.state.edges[data.source] = data.payload.location
 
-        # SAVE EDGE IN STATE
-        self.edges[data.source] = prettify_dict({
-            'location': data.payload.location.raw(),
-            'channel': response_channel
-        })
-        
-        # CREATE & ENCODE MESSAGE
-        message = self.encode_data({
-            'source': self.config.keys.public,
+        # CONTACT EDGE
+        self.publish(data.source, {
+            'source': self.config.service.public,
             'payload': {
-                'encryption': {
-                    'public': data.source,
-                    'private': self.config.keys.private,
-                },
-                'action': 'log_exchange',
-                'channel': response_channel
+                'action': 'signup',
+                'success': True,
             }
         })
-
-        # PUBLISH MSG TO SERVICE CHANNEL
-        self.publish(data.payload.channel, message)
-        self.leave(data.payload.channel)
 
     # FIND CLOSEST EDGE DEVICE
     def closest_edge(self, iot):
@@ -54,20 +39,27 @@ class service_worker(skeleton):
         best_distance = float('inf')
 
         # NO EDGES EXIST
-        if len(self.edges) == 0:
+        if len(self.state.edges) == 0:
             return best_edge
 
         # FIND THE CLOSEST
-        for name in self.edges:
-            edge = self.edges[name]
-            distance = straight_distance(edge, iot)
+        for current in self.state.edges:
+            edge = self.state.edges[current]
+
+            # COMPUTE STRAIGHT LINE DISTANCE
+            P1 = abs(iot.x - edge.x)**2
+            P2 = abs(iot.y - edge.y)**2
+            distance = math.sqrt(P1 + P2)
 
             # UPDATE WHEN A BETTER DISTANCE IS FOUND
             if distance < best_distance:
-                best_edge = edge
+                best_edge = current
                 best_distance = distance
 
-        return best_edge.channel, best_distance
+        return prettify_dict({
+            'edge': best_edge,
+            'distance': best_distance
+        })
 
     # PERFORM IOT HANDSHAKE
     def iot_handshake(self, data):
@@ -75,34 +67,42 @@ class service_worker(skeleton):
         # FIND CLOSEST EDGE
         iot_coords = data.payload.location
         response = self.closest_edge(iot_coords)
-        
-        # DEFAULT RESPONSE MESSAGE
-        message = self.encode_data({
-            'source': self.config.keys.public,
-            'payload': {
-                'success': False,
-                'reason': 'No edge devices found',
-                'action': 'log_exchange',
-            }
-        })
 
-        # EDGE FOUND, UPDATE MESSAGE
-        if response:
-            message = self.encode_data({
-                'source': self.config.keys.public,
+        # NO EDGES, RESPOND WITH ERROR
+        if not response:
+            return self.publish(data.source, {
+                'source': self.config.service.public,
                 'payload': {
-                    'success': True,
-                    'action': 'log_exchange',
-                    'edge': {
-                        'channel': response[0],
-                        'distance': response[1]
-                    }
+                    'action': 'add_link',
+                    'success': False,
+                    'reason': 'No edge devices found',
                 }
             })
 
-        # PUBLISH RESPONSE TO SOURCE
-        self.publish(data.payload.channel, message)
-        self.leave(data.payload.channel)
+        # CONTACT EDGE
+        self.publish(response.edge, {
+            'source': self.config.service.public,
+            'payload': {
+                'action': 'add_link',
+                'iot': {
+                    'channel': data.source,
+                    'distance': response.distance
+                }
+            }
+        })
+
+        # CONTACT IOT
+        self.publish(data.source, {
+            'source': self.config.service.public,
+            'payload': {
+                'action': 'add_link',
+                'success': True,
+                'edge': {
+                    'channel': response.edge,
+                    'distance': response.distance
+                }
+            }
+        })
 
 # BOOT UP WORKER
 launch(service_worker)

@@ -15,12 +15,15 @@ def load_yaml(path):
 class prettify_dict:
     def __init__(self, data_dict):
         self.data_dict = data_dict
+        self.populate(data_dict)
 
-        for key in data_dict:
-            if type(data_dict[key]) == dict:
-                setattr(self, key, prettify_dict(data_dict[key]))
+    # POPULATE INSTANCE PROPS
+    def populate(self, data):
+        for key in data:
+            if type(data[key]) == dict:
+                setattr(self, key, prettify_dict(data[key]))
             else:
-                setattr(self, key, data_dict[key])
+                setattr(self, key, data[key])
 
     # AUTO PRINTING
     def __str__(self):
@@ -42,10 +45,3 @@ def create_secret(prefix=''):
 # SLEEP FOR X SECONDS
 def sleep(seconds):
     time.sleep(seconds)
-
-# COMPUTE STRAIGHT LINE DISTANCE
-def straight_distance(edge, iot):
-    foo = abs(iot.x - edge.location.x)**2
-    bar = abs(iot.y - edge.location.y)**2
-
-    return math.sqrt(foo + bar)

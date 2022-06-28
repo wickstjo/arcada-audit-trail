@@ -1,18 +1,25 @@
 # SERVICE WORKER
 service:
-    channel: service
-    keys:
-        public: service-public
-        private: service-private
+    public: service-1fa6577ab3354348fe05140435e791bb
+    private: service-private
+
+# STORAGE WORKER
+storage:
+    public: storage-77e740391bc1655b3438ddbb04a06960
+    private: storage-private
 
 # EDGE WORKER
 edge:
-    keys:
-        public: edge-public
-        private: edge-private
+    public: edge-c5eef93df4995b963f64eae65e541b86
+    private: edge-private
+    location:
+        x: 5
+        y: 1
 
 # IOT WORKER
 iot:
-    keys:
-        public: iot-public
-        private: iot-private
+    public: iot-3256e45e565478c9381d8fe77137f164
+    private: iot-private
+    location:
+        x: 8
+        y: 5

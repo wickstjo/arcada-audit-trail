@@ -1,53 +1,53 @@
 from utils.worker import skeleton, launch
 from utils.misc import log, create_secret
 
-class iot_worker(skeleton):
+class edge_worker(skeleton):
     def created(self):
         log('EDGE WORKER STARTED..')
-        self.service = self.config.service
-        self.config = self.config.edge
+        self.state.connections = 0
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
-            'log_exchange': self.log_exchange,
+            'signup': self.signup,
+            'add_link': self.add_link,
+            'log_dump': self.log_dump,
         }
 
-        # RUN SERVICE QUERY
+        # RUN SERVICE QUERY & SUBSCRIBE TO CHANNEL
         self.service_query()
+        self.subscribe(self.config.edge.public)
 
     # START CONNECTION PROCESS
     def service_query(self):
 
-        # GENERATE RESPONSE CHANNEL
-        response_channel = create_secret()
+        # PUBLISH MSG TO SERVICE CHANNEL
+        service_channel = self.config.service.public
 
-        # CREATE & ENCODE MESSAGE
-        message = self.encode_data({
-            'source': self.config.keys.public,
+        self.publish(service_channel, {
+            'source': self.config.edge.public,
             'payload': {
-                'encryption': {
-                    'public': self.service.keys.public,
-                    'private': self.config.keys.private
-                },
-                'location': {
-                    'x': 5,
-                    'y': 1
-                },
-                'task': 'log_audit',
                 'action': 'edge_handshake',
-                'channel': response_channel
+                'location': self.config.edge.location.raw()
             }
         })
 
-        # PUBLISH MSG TO SERVICE CHANNEL
-        self.publish(self.service.channel, message)
-        self.leave(self.service.channel)
+    # EDGE ADDED EVENT
+    def signup(self, data):
 
-        # SUBSCRIBE TO RESPONSE CHANNEL
-        self.subscribe(response_channel)
+        # SUCCESS
+        if data.payload.success:
+            log('SUCCESS:\t\t' + 'DEVICE REGISTERED')
 
-    def log_exchange(self, data):
-        print(data)
+        # ERROR
+        else:
+            log('ERROR:\t\t' + data.payload.reason)
+
+    # CONNECTION ADDED
+    def add_link(self, data):
+        log('LINKED WITH IOT:\t{}'.format(data.payload.iot.channel))
+
+    def log_dump(self, data):
+        log('RECEIVED LOGS:\t{} ROWS'.format(len(data.payload.logs)))
 
 # BOOT UP WORKER
-launch(iot_worker)
+launch(edge_worker)
