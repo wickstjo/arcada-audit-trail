@@ -3,8 +3,7 @@ from utils.misc import log, create_secret
 
 class edge_worker(skeleton):
     def created(self):
-        log('EDGE WORKER STARTED..')
-        self.state.connections = 0
+        log('STARTUP:\t\t' + 'EDGE WORKER')
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -14,19 +13,20 @@ class edge_worker(skeleton):
         }
 
         # RUN SERVICE QUERY & SUBSCRIBE TO CHANNEL
-        self.service_query()
-        self.subscribe(self.config.edge.public)
+        self.service_handshake()
+        self.subscribe(self.config.edge.keys.public)
 
     # START CONNECTION PROCESS
-    def service_query(self):
+    def service_handshake(self):
 
         # PUBLISH MSG TO SERVICE CHANNEL
-        service_channel = self.config.service.public
+        service_channel = self.config.service.keys.public
 
         self.publish(service_channel, {
-            'source': self.config.edge.public,
+            'source': self.config.edge.keys.public,
             'payload': {
                 'action': 'edge_handshake',
+                'type': self.config.edge.type,
                 'location': self.config.edge.location.raw()
             }
         })

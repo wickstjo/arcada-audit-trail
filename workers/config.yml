@@ -1,25 +1,31 @@
 # SERVICE WORKER
 service:
-    public: service-1fa6577ab3354348fe05140435e791bb
-    private: service-private
+    keys:
+        public: service-1fa6577ab3354348fe05140435e791bb
+        private: service-private
 
 # STORAGE WORKER
 storage:
-    public: storage-77e740391bc1655b3438ddbb04a06960
-    private: storage-private
+    keys:
+        public: storage-77e740391bc1655b3438ddbb04a06960
+        private: storage-private
+    type: syslog-storage
 
 # EDGE WORKER
 edge:
-    public: edge-c5eef93df4995b963f64eae65e541b86
-    private: edge-private
+    keys:
+        public: edge-c5eef93df4995b963f64eae65e541b86
+        private: edge-private
+    type: anomaly-detection
     location:
         x: 5
         y: 1
 
 # IOT WORKER
 iot:
-    public: iot-3256e45e565478c9381d8fe77137f164
-    private: iot-private
+    keys:
+        public: iot-3256e45e565478c9381d8fe77137f164
+        private: iot-private
     location:
         x: 8
         y: 5

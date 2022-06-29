@@ -1,4 +1,4 @@
-from utils.misc import load_yaml, prettify_dict, log, sleep
+from utils.misc import load_yaml, wrapper, log, sleep
 from utils.rabbit import create_instance
 import base64
 import hashlib
@@ -12,9 +12,6 @@ class skeleton:
 
         # CREATE RABBIT CONNECTION CONTAINER
         self.rabbit = {}
-
-        # DECLARE OWN STATE
-        self.state = prettify_dict({})
 
         # RUN PSEUDO CONSTRUCTOR FUNC
         self.created()
@@ -33,8 +30,11 @@ class skeleton:
     # ENCODE RABBIT MESSAGE & PUBLISH IT
     def publish(self, channel, message):
         sleep(1)
-        instance = self.get_instance(channel)
+
+        # ADD PAYLOAD CHECKSUM
+        message['checksum'] = self.hashify(message['payload'])
         
+        instance = self.get_instance(channel)
         encoded = self.encode_data(message)
         instance.publish(channel, encoded)
 
@@ -90,7 +90,7 @@ class skeleton:
         try:
             stringified = base64.b64decode(data)
             data = json.loads(stringified)
-            return prettify_dict(data)
+            return wrapper(data)
         
         # IF IT FAILS, RETURN NULL
         except:
@@ -110,7 +110,7 @@ class skeleton:
 
     # GENERATE EXECUTION 
     def hashify(self, data):
-        encoded = encode_data(data)
+        encoded = self.encode_data(data)
         return hashlib.sha256(encoded).hexdigest()
 
 # BOOT UP WORKER

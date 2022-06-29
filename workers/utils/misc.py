@@ -9,10 +9,10 @@ import math
 def load_yaml(path):
     with open(path, mode='r') as file:
         data = yaml.load(file, Loader=yaml.FullLoader)
-        return prettify_dict(data)
+        return wrapper(data)
 
 # WRAP DICT INTO A EASIER TO USE CLASS
-class prettify_dict:
+class wrapper:
     def __init__(self, data_dict):
         self.data_dict = data_dict
         self.populate(data_dict)
@@ -21,7 +21,7 @@ class prettify_dict:
     def populate(self, data):
         for key in data:
             if type(data[key]) == dict:
-                setattr(self, key, prettify_dict(data[key]))
+                setattr(self, key, wrapper(data[key]))
             else:
                 setattr(self, key, data[key])
 
@@ -45,3 +45,35 @@ def create_secret(prefix=''):
 # SLEEP FOR X SECONDS
 def sleep(seconds):
     time.sleep(seconds)
+
+# GENERATE CURRENT TIMESTAMP
+def timestamp():
+    return int(time.time())
+
+# FIND CLOSEST EDGE DEVICE
+def find_closest(target, nodes):
+    best_node = None
+    best_distance = float('inf')
+
+    # NO EDGES EXIST
+    if len(nodes) == 0:
+        return best_node
+
+    # FIND THE CLOSEST
+    for current in nodes:
+        node = nodes[current]
+
+        # COMPUTE STRAIGHT LINE DISTANCE
+        P1 = abs(target.location.x - node.location.x)**2
+        P2 = abs(target.location.y - node.location.y)**2
+        distance = math.sqrt(P1 + P2)
+
+        # UPDATE WHEN A BETTER DISTANCE IS FOUND
+        if distance < best_distance:
+            best_node = current
+            best_distance = distance
+
+    return wrapper({
+        'node': best_node,
+        'distance': best_distance
+    })
