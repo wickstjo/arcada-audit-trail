@@ -1,5 +1,5 @@
 from utils.worker import skeleton, launch
-from utils.misc import log, create_secret
+from utils.misc import log, create_secret, wrapper, timestamp
 
 class edge_worker(skeleton):
     def created(self):
@@ -7,8 +7,8 @@ class edge_worker(skeleton):
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
-            'signup': self.signup,
-            'add_link': self.add_link,
+            'handshake_response': self.handshake_response,
+            'iot_link': self.iot_link,
             'log_dump': self.log_dump,
         }
 
@@ -19,32 +19,44 @@ class edge_worker(skeleton):
     # START CONNECTION PROCESS
     def service_handshake(self):
 
-        # PUBLISH MSG TO SERVICE CHANNEL
-        service_channel = self.config.service.keys.public
+        # CREATE ID FOR REQUEST
+        request_id = create_secret(6)
 
-        self.publish(service_channel, {
+        self.publish(self.config.service.keys.public, {
             'source': self.config.edge.keys.public,
             'payload': {
                 'action': 'edge_handshake',
                 'type': self.config.edge.type,
-                'location': self.config.edge.location.raw()
+                'location': self.config.edge.location.raw(),
+                'secret': request_id,
             }
         })
 
+        # STORE REQUEST ID FOR VERIFICATION
+        self.requests[request_id] = wrapper({
+            'source': self.config.service.keys.public,
+            'timestamp': timestamp(),
+        })
+
     # EDGE ADDED EVENT
-    def signup(self, data):
+    def handshake_response(self, data):
+        turnaround = self.validate_secret(data)
 
-        # SUCCESS
-        if data.payload.success:
-            log('SUCCESS:\t\t' + 'DEVICE REGISTERED')
+        # VALIDATION FAILED
+        if not turnaround:
+            return
 
-        # ERROR
-        else:
-            log('ERROR:\t\t' + data.payload.reason)
+        # SOMETHING WENT WRONG, LOG ERROR
+        if not data.payload.success:
+            log('ERROR:\t\t{} (time: {})'.format(data.payload.reason, turnaround))
+            return
 
-    # CONNECTION ADDED
-    def add_link(self, data):
-        log('LINKED WITH IOT:\t{}'.format(data.payload.iot.channel))
+        # OTHERWISE, LOG SUCCESS
+        log('SUCCESS:\t\t' + 'SERVICE HANDSHAKE RESOLVED (time: {})'.format(turnaround))
+
+    # ADD IOT LINK
+    def iot_link(self, data):
+        log('SUCCESS:\t\tIOT LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
 
     def log_dump(self, data):
         log('RECEIVED LOGS:\t{} ROWS'.format(len(data.payload.logs)))

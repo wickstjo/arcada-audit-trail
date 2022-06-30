@@ -8,7 +8,7 @@ class iot_worker(skeleton):
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
-            'add_link': self.add_link,
+            'handshake_response': self.handshake_response,
         }
 
         # RUN SERVICE QUERY & SUBSCRIBE TO IOT CHANNEL
@@ -30,15 +30,15 @@ class iot_worker(skeleton):
         })
 
     # FIND EDGE RESPONSE
-    def add_link(self, data):
+    def handshake_response(self, data):
 
         # IF EVERYTHING WENT OK
         if data.payload.success:
-            log('LINKED WITH EDGE:\t' + data.payload.edge.channel)
+            log('SUCCESS:\t\tEDGE LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
 
-            for _ in range(5):
-                sleep(5)
-                self.dump_logs(data.payload.edge.channel)
+            # for _ in range(5):
+            #     sleep(5)
+            #     self.dump_logs(data.payload.edge.channel)
 
         # OTHERWISE, RENDER ERROR
         else:

@@ -29,6 +29,10 @@ class wrapper:
     def __str__(self):
         return json.dumps(self.data_dict, indent=2)
 
+    def push(self, key, value):
+        setattr(self, key, value)
+        self.data_dict[key] = value
+
     def raw(self):
         return self.data_dict
 
@@ -39,8 +43,8 @@ def log(msg):
     print(prefix, msg, flush=True)
 
 # GENERATE RANDOM BITS OF DATA
-def create_secret(prefix=''):
-    return secrets.token_hex(nbytes=16)
+def create_secret(length):
+    return secrets.token_hex(nbytes=length)
 
 # SLEEP FOR X SECONDS
 def sleep(seconds):
@@ -48,7 +52,12 @@ def sleep(seconds):
 
 # GENERATE CURRENT TIMESTAMP
 def timestamp():
-    return int(time.time())
+    return time.time()
+
+# COMPUTE DELTA BETWEEN TIMESTAMPS
+def time_delta(start):
+    end = timestamp()
+    return round(abs(end-start), 4)
 
 # FIND CLOSEST EDGE DEVICE
 def find_closest(target, nodes):

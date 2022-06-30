@@ -1,4 +1,4 @@
-from utils.misc import load_yaml, wrapper, log, sleep
+from utils.misc import load_yaml, wrapper, log, sleep, time_delta
 from utils.rabbit import create_instance
 import base64
 import hashlib
@@ -10,8 +10,10 @@ class skeleton:
         # LOAD WORKER CONFIG & SAVE IT
         self.config = load_yaml('./config.yml')
 
-        # CREATE RABBIT CONNECTION CONTAINER
+        # AUXILLARY STATES
         self.rabbit = {}
+        self.requests = {}
+        self.links = {}
 
         # RUN PSEUDO CONSTRUCTOR FUNC
         self.created()
@@ -48,13 +50,15 @@ class skeleton:
             # IF DECODING PROCESS WORKER OUT, CALL NEXT FUNC            
             if decoded:
                 log('VALID MSG FROM:\t' + decoded.source)
+                
                 self.action(decoded)
+                print()
                 return
             
             # OTHERWISE, PRINT ERROR
-            log('INVALID MSG DISCARDED')
-
+            log('INVALID MSG FROM:\t' + decoded.source)
         log('SUBSCRIBED TO:\t' + channel)
+        print()
         
         # SAVE CONNECTION IN STATE
         instance = self.get_instance(channel)
@@ -112,6 +116,25 @@ class skeleton:
     def hashify(self, data):
         encoded = self.encode_data(data)
         return hashlib.sha256(encoded).hexdigest()
+
+    # VALIDATE REQUEST CONTAINING A SECRET
+    def validate_secret(self, data):
+
+        # ERROR, REQUEST SECRET DOES NOT EXIST
+        if data.payload.secret not in self.requests:
+            log('ERROR:\t\t' + 'SECRET DOES NOT EXIST')
+            return None
+
+        # ERROR, REQUEST SOURCE NOT CORRECT
+        if self.requests[data.payload.secret].source != data.source:
+            log('ERROR:\t\t' + 'REQUEST SECRET SOURCE IS INCORRECT')
+            return None
+
+        # COMPUTE TIME DELTA & DELETE THE REQUEST
+        delta = time_delta(self.requests[data.payload.secret].timestamp)
+        del self.requests[data.payload.secret]
+
+        return delta
 
 # BOOT UP WORKER
 def launch(worker):

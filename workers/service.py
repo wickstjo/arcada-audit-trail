@@ -8,7 +8,6 @@ class service_worker(skeleton):
         # DEVICE COLLECTIONS
         self.storage_collection = {}
         self.edge_collection = {}
-        self.iot_collection = {}
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -22,19 +21,65 @@ class service_worker(skeleton):
 
     # PERFORM STORAGE HANDSHAKE
     def storage_handshake(self, data):
-        print(data)
+
+        # SAVE DEVICE IN STATE
+        self.storage_collection[data.source] = wrapper({
+            'type': data.payload.type,
+            'location': data.payload.location,
+            'timestamp': timestamp()
+        })
+
+        # CONTACT DEVICE
+        self.publish(data.source, {
+            'source': self.config.service.keys.public,
+            'payload': {
+                'action': 'handshake_response',
+                'secret': data.payload.secret,
+                'success': True,
+            }
+        })
+
+        # LOG SUCCESS
+        log('SUCCESS:\t\t' + 'STORAGE DEVICE CREATED')
 
     # PERFORM EDGE HANDSHAKE
     def edge_handshake(self, data):
 
-        # CREATE TYPE PROPERTY IF IT DOESNT EXIST
-        if data.payload.type not in self.edge_collection:
-            self.edge_collection[data.payload.type] = {}
+        # FIND CLOSEST STORAGE DEVICE
+        response = find_closest(
+            data.payload,
+            self.storage_collection
+        )
 
-        # SAVE EDGE COORDINATES IN STATE
-        self.edge_collection[data.payload.type][data.source] = wrapper({
+        # ERROR, NO STORAGE DEVICES EXIST
+        if not response:
+            log('ERROR:\t\t' + 'NO STORAGE DEVICES FOUND')
+
+            return self.publish(data.source, {
+                'source': self.config.service.keys.public,
+                'payload': {
+                    'action': 'handshake_response',
+                    'success': False,
+                    'reason': 'No storage devices found',
+                    'secret': data.payload.secret,
+                }
+            })
+
+        # SAVE DEVICE IN STATE
+        self.edge_collection[data.source] = wrapper({
+            'type': data.payload.type,
             'location': data.payload.location,
             'timestamp': timestamp()
+        })
+
+        # CONTACT STORAGE
+        self.publish(response.node, {
+            'source': self.config.service.keys.public,
+            'payload': {
+                'action': 'edge_link',
+                'edge': data.source,
+                'distance': response.distance
+            }
         })
 
         # CONTACT EDGE
@@ -42,9 +87,13 @@ class service_worker(skeleton):
             'source': self.config.service.keys.public,
             'payload': {
                 'action': 'handshake_response',
+                'secret': data.payload.secret,
                 'success': True,
             }
         })
+
+        # LOG SUCCESS
+        log('SUCCESS:\t\t' + 'EDGE => STORAGE LINK ESTABLISHED')
 
     # PERFORM IOT HANDSHAKE
     def iot_handshake(self, data):
@@ -52,29 +101,29 @@ class service_worker(skeleton):
         # FIND CLOSEST EDGE
         response = find_closest(
             data.payload,
-            self.collections['edge']
+            self.edge_collection
         )
 
-        # NO EDGES, RESPOND WITH ERROR
+        # ERROR, NO EDGE DEVICES EXIST
         if not response:
+            log('ERROR:\t\t' + 'NO EDGE DEVICES FOUND')
+
             return self.publish(data.source, {
                 'source': self.config.service.keys.public,
                 'payload': {
-                    'action': 'add_link',
+                    'action': 'handshake_response',
                     'success': False,
                     'reason': 'No edge devices found',
                 }
             })
 
         # CONTACT EDGE
-        self.publish(response.edge, {
+        self.publish(response.node, {
             'source': self.config.service.keys.public,
             'payload': {
-                'action': 'add_link',
-                'iot': {
-                    'channel': data.source,
-                    'distance': response.distance
-                }
+                'action': 'iot_link',
+                'iot': data.source,
+                'distance': response.distance
             }
         })
 
@@ -82,14 +131,15 @@ class service_worker(skeleton):
         self.publish(data.source, {
             'source': self.config.service.keys.public,
             'payload': {
-                'action': 'add_link',
+                'action': 'handshake_response',
                 'success': True,
-                'edge': {
-                    'channel': response.node,
-                    'distance': response.distance
-                }
+                'edge': response.node,
+                'distance': response.distance
             }
         })
+
+        # LOG SUCCESS
+        log('SUCCESS:\t\t' + 'IOT => EDGE LINK ESTABLISHED')
 
 # BOOT UP WORKER
 launch(service_worker)

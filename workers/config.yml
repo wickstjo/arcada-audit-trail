@@ -10,6 +10,9 @@ storage:
         public: storage-77e740391bc1655b3438ddbb04a06960
         private: storage-private
     type: syslog-storage
+    location:
+        x: 5
+        y: 5
 
 # EDGE WORKER
 edge:
