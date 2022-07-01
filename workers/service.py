@@ -3,7 +3,7 @@ from utils.misc import log, create_secret, wrapper, find_closest, timestamp
 
 class service_worker(skeleton):
     def created(self):
-        log('STARTUP:\t\t' + 'SERVICE WORKER')
+        self.log('STARTUP:\t\t' + 'SERVICE WORKER')
 
         # DEVICE COLLECTIONS
         self.storage_collection = {}
@@ -40,7 +40,7 @@ class service_worker(skeleton):
         })
 
         # LOG SUCCESS
-        log('SUCCESS:\t\t' + 'STORAGE DEVICE CREATED')
+        self.log('SUCCESS:\t\t' + 'STORAGE DEVICE CREATED')
 
     # PERFORM EDGE HANDSHAKE
     def edge_handshake(self, data):
@@ -53,7 +53,7 @@ class service_worker(skeleton):
 
         # ERROR, NO STORAGE DEVICES EXIST
         if not response:
-            log('ERROR:\t\t' + 'NO STORAGE DEVICES FOUND')
+            self.log('ERROR:\t\t' + 'NO STORAGE DEVICES FOUND')
 
             return self.publish(data.source, {
                 'source': self.config.service.keys.public,
@@ -87,13 +87,14 @@ class service_worker(skeleton):
             'source': self.config.service.keys.public,
             'payload': {
                 'action': 'handshake_response',
+                'storage': response.node,
                 'secret': data.payload.secret,
                 'success': True,
             }
         })
 
         # LOG SUCCESS
-        log('SUCCESS:\t\t' + 'EDGE => STORAGE LINK ESTABLISHED')
+        self.log('SUCCESS:\t\t' + 'EDGE => STORAGE LINK ESTABLISHED')
 
     # PERFORM IOT HANDSHAKE
     def iot_handshake(self, data):
@@ -106,7 +107,7 @@ class service_worker(skeleton):
 
         # ERROR, NO EDGE DEVICES EXIST
         if not response:
-            log('ERROR:\t\t' + 'NO EDGE DEVICES FOUND')
+            self.log('ERROR:\t\t' + 'NO EDGE DEVICES FOUND')
 
             return self.publish(data.source, {
                 'source': self.config.service.keys.public,
@@ -139,7 +140,7 @@ class service_worker(skeleton):
         })
 
         # LOG SUCCESS
-        log('SUCCESS:\t\t' + 'IOT => EDGE LINK ESTABLISHED')
+        self.log('SUCCESS:\t\t' + 'IOT => EDGE LINK ESTABLISHED')
 
 # BOOT UP WORKER
 launch(service_worker)

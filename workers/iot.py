@@ -4,7 +4,7 @@ import random
 
 class iot_worker(skeleton):
     def created(self):
-        log('STARTUP:\t\t' + 'IOT WORKER')
+        self.log('STARTUP:\t\t' + 'IOT WORKER')
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -32,33 +32,38 @@ class iot_worker(skeleton):
     # FIND EDGE RESPONSE
     def handshake_response(self, data):
 
-        # IF EVERYTHING WENT OK
-        if data.payload.success:
-            log('SUCCESS:\t\tEDGE LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
+        # SOMETHING WENT WRONG
+        if not data.payload.success:
+            self.log('ERROR:\t\t' + data.payload.reason)
+            return
 
-            # for _ in range(5):
-            #     sleep(5)
-            #     self.dump_logs(data.payload.edge.channel)
+        # SAVE EDGE DEVICE IN STATE
+        self.edge_device = data.payload.edge
 
-        # OTHERWISE, RENDER ERROR
-        else:
-            log('ERROR:\t\t' + data.payload.reason)
-            # log('TRYING AGAIN IN 5 SECONDS')
-            # sleep(5)
-            # self.service_query()
+        # OTHERWISE, PROCEDE NORMALLY
+        self.log('SUCCESS:\t\tEDGE LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
+        print()
 
-    def dump_logs(self, edge):
-        rows = random.randint(3, 30)
+        # DUMP TESTLOGS WITH INTERVAL X TIMES
+        for _ in range(10):
+            sleep(2)
+            self.dump_logs()
 
-        self.publish(edge, {
+    # DUMP LOGS
+    def dump_logs(self):
+        # rows = random.randint(3, 30)
+        rows = 20
+
+        self.publish(self.edge_device, {
             'source': self.config.iot.keys.public,
             'payload': {
                 'action': 'log_dump',
-                'logs': [create_secret() for x in range(rows)]
+                'logs': [create_secret(5) for x in range(rows)]
             }
         })
 
-        log('DUMPED LOGS:\t\t{} ROWS'.format(rows))
+        self.log('ACTION:\t\tDUMPED {} ROWS OF LOGS'.format(rows))
+        print()
 
 # BOOT UP WORKER
 launch(iot_worker)

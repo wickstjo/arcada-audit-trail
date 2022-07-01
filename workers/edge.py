@@ -3,7 +3,7 @@ from utils.misc import log, create_secret, wrapper, timestamp
 
 class edge_worker(skeleton):
     def created(self):
-        log('STARTUP:\t\t' + 'EDGE WORKER')
+        self.log('STARTUP:\t\t' + 'EDGE WORKER')
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -48,18 +48,52 @@ class edge_worker(skeleton):
 
         # SOMETHING WENT WRONG, LOG ERROR
         if not data.payload.success:
-            log('ERROR:\t\t{} (time: {})'.format(data.payload.reason, turnaround))
+            self.log('ERROR:\t\t{} (time: {})'.format(data.payload.reason, turnaround))
             return
 
-        # OTHERWISE, LOG SUCCESS
-        log('SUCCESS:\t\t' + 'SERVICE HANDSHAKE RESOLVED (time: {})'.format(turnaround))
+        # OTHERWISE, SAVE STORAGE DEVICE IN STATE
+        self.storage_device = data.payload.storage
+
+        # LOG SUCCESS
+        self.log('SUCCESS:\t\t' + 'SERVICE HANDSHAKE RESOLVED (time: {})'.format(turnaround))
 
     # ADD IOT LINK
     def iot_link(self, data):
-        log('SUCCESS:\t\tIOT LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
+        self.log('SUCCESS:\t\tIOT LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
 
+    # RECEIVE SYSLOGS FROM IOT
     def log_dump(self, data):
-        log('RECEIVED LOGS:\t{} ROWS'.format(len(data.payload.logs)))
+
+        # TODO: MAKE SURE IOT DEVICE IS LINKED
+
+        self.log('ACTION:\t\tRECEIVED {} ROWS OF LOGS'.format(len(data.payload.logs)))
+
+        # FIND & LOG ANOMALIES
+        anomalies = self.find_anomalies(data.payload.logs)
+        percentage = len(anomalies) / len(data.payload.logs) * 100
+        self.log('ACTION:\t\tDETECTED {} ANOMALIES ({}%)'.format(len(anomalies), percentage))
+
+        # SUBMIT ANONMALIES FOR STORAGE
+        if len(anomalies) > 0:
+            self.publish(self.storage_device, {
+                'source': self.config.edge.keys.public,
+                'payload': {
+                    'action': 'store_anomalies',
+                    'anomalies': anomalies,
+                }
+            })
+
+            self.log('ACTION:\t\tSUBMITTED ANOMALIES FOR STORAGE')
+    # 
+    def find_anomalies(self, logs):
+        container = []
+
+        # FIND ANOMALIES
+        for string in logs:
+            if 'a' in string:
+                container.append(string)
+
+        return container
 
 # BOOT UP WORKER
 launch(edge_worker)
