@@ -3,7 +3,9 @@ from utils.misc import log, create_secret, wrapper, timestamp
 
 class edge_worker(skeleton):
     def created(self):
-        self.log('STARTUP:\t\t' + 'EDGE WORKER')
+        
+        # INITIALIZE LOGGER
+        self.init_logger('edge', self.config.edge)
 
         # WHITELISTED CALLBACK ACTIONS
         self.actions = {
@@ -46,34 +48,65 @@ class edge_worker(skeleton):
         if not turnaround:
             return
 
+        # MAKE SURE THE SENDER IS THE SERVICE
+        if data.source != self.config.service.keys.public:
+            return self.log({
+                'message': 'Handshake response from non-service channel blocked',
+                'caller': data.source
+            })
+
         # SOMETHING WENT WRONG, LOG ERROR
         if not data.payload.success:
-            self.log('ERROR:\t\t{} (time: {})'.format(data.payload.reason, turnaround))
-            return
+            return self.log({
+                'message': 'Handshake process could not be completed',
+                'reason': data.payload.reason,
+                'turnaround': turnaround,
+            })
 
         # OTHERWISE, SAVE STORAGE DEVICE IN STATE
         self.storage_device = data.payload.storage
 
         # LOG SUCCESS
-        self.log('SUCCESS:\t\t' + 'SERVICE HANDSHAKE RESOLVED (time: {})'.format(turnaround))
+        self.log({
+            'message': 'Handshake process completed',
+            'turnaround': turnaround,
+        })
 
     # ADD IOT LINK
     def iot_link(self, data):
-        self.log('SUCCESS:\t\tIOT LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
+
+        # IF THE CALLER WASNT THE SERVICE CHANNEL
+        if data.source != self.config.service.keys.public:
+            return self.log({
+                'message': 'Link request from non-service channel blocked',
+                'caller': data.source
+            })
+
+        # OTHERWISE, LOG SUCCESS
+        self.log({
+            'message': 'IOT relationship link created',
+            'iot': data.payload.distance,
+            'distance': data.payload.distance
+        })
 
     # RECEIVE SYSLOGS FROM IOT
     def log_dump(self, data):
 
         # TODO: MAKE SURE IOT DEVICE IS LINKED
 
-        self.log('ACTION:\t\tRECEIVED {} ROWS OF LOGS'.format(len(data.payload.logs)))
-
         # FIND & LOG ANOMALIES
         anomalies = self.find_anomalies(data.payload.logs)
-        percentage = len(anomalies) / len(data.payload.logs) * 100
-        self.log('ACTION:\t\tDETECTED {} ANOMALIES ({}%)'.format(len(anomalies), percentage))
+        # percentage = len(anomalies) / len(data.payload.logs) * 100
 
-        # SUBMIT ANONMALIES FOR STORAGE
+        # LOG INTERCEPTION
+        self.log({
+            'message': 'Parsed syslogs from iot',
+            'rows': len(data.payload.logs),
+            'anomalies': len(anomalies),
+            'caller': data.source,
+        })
+
+        # NO ANOMALIES FOUND -- STOP HERE 
         if len(anomalies) > 0:
             self.publish(self.storage_device, {
                 'source': self.config.edge.keys.public,
@@ -83,8 +116,7 @@ class edge_worker(skeleton):
                 }
             })
 
-            self.log('ACTION:\t\tSUBMITTED ANOMALIES FOR STORAGE')
-    # 
+    # FIND ANOMALIES FROM SYSLOGS
     def find_anomalies(self, logs):
         container = []
 

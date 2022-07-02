@@ -1,0 +1,58 @@
+details:
+    keys:
+        public: service-1fa6577ab3354348fe05140435e791bb
+        private: service-private
+    worker: service
+logs:
+    13:00:07:776981:
+        message: Service worker started
+    13:00:07:777596:
+        message: Subscribed to channel feed
+        channel: service-1fa6577ab3354348fe05140435e791bb
+    13:00:11:351956:
+        message: Valid message received
+        caller: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:11:353383:
+        message: Action triggered
+        action: storage_handshake
+        caller: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:12:369590:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:12:375733:
+        message: Storage device created
+        device: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:16:087615:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:16:094868:
+        message: Action triggered
+        action: edge_handshake
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:17:104124:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:18:123873:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:18:133519:
+        message: Relationship link created
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        storage: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:18:617853:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:18:631554:
+        message: Action triggered
+        action: iot_handshake
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:19:644330:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:20:661816:
+        message: Pushed message to channel
+        channel: iot-3256e45e565478c9381d8fe77137f164
+    13:00:20:675514:
+        message: Relationship link created
+        iot: iot-3256e45e565478c9381d8fe77137f164
+        edge: edge-c5eef93df4995b963f64eae65e541b86

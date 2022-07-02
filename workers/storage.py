@@ -4,7 +4,10 @@ from utils.misc import log, create_secret, wrapper, timestamp
 
 class storage_worker(skeleton):
     def created(self):
-        self.log('STARTUP:\t\t' + 'STORAGE WORKER')
+
+        # INITIALIZE LOGGER
+        self.init_logger('storage', self.config.storage)
+
         self.edge_collection = {}
         self.database = {}
 
@@ -52,24 +55,34 @@ class storage_worker(skeleton):
 
         # MAKE SURE THE SENDER IS THE SERVICE
         if data.source != self.config.service.keys.public:
-            self.log('ERROR:\t\t' + 'HANDSHAKE RESPONSE FROM NON-SERVICE')
-            return
+            return self.log({
+                'message': 'Handshake response from non-service channel blocked',
+                'caller': data.source
+            })
 
         # SOMETHING WENT WRONG, LOG ERROR
         if not data.payload.success:
-            self.log('ERROR:\t\t{} ({} S)'.format(data.payload.reason, turnaround))
-            return
+            return self.log({
+                'message': 'Handshake process could not be completed',
+                'reason': data.payload.reason,
+                'turnaround': turnaround
+            })
 
         # OTHERWISE, LOG SUCCESS
-        self.log('SUCCESS:\t\t' + 'SERVICE HANDSHAKE RESOLVED (time: {})'.format(turnaround))
+        self.log({
+            'message': 'Handshake process completed',
+            'turnaround': turnaround
+        })
 
     # WHITELIST EDGE DEVICE
     def edge_link(self, data):
 
         # MAKE SURE THE SENDER IS THE SERVICE
         if data.source != self.config.service.keys.public:
-            self.log('ERROR:\t\t' + 'LINK REQUEST FROM NON-SERVICE')
-            return
+            return self.log({
+                'message': 'Link request from non-service channel blocked',
+                'channel': data.source
+            })
 
         # ADD LINK TO STATE
         self.edge_collection[data.payload.edge] = {
@@ -78,14 +91,18 @@ class storage_worker(skeleton):
         }
 
         # LOG SUCCESS
-        self.log('SUCCESS\t\t' + 'EDGE LINK ESTABLISHED (distance: {})'.format(data.payload.distance))
+        self.log({
+            'message': 'Edge relationship link created',
+            'edge': data.payload.edge,
+            'distance': data.payload.distance,
+        })
 
     # PERMANENTLY STORE SYSLOG
     def store_anomalies(self, data):
 
         # TODO: MAKE SURE EDGE IS LINKED
 
-        self.log('ACTION:\t\tRECEIVED {} ANOMALIES'.format(len(data.payload.anomalies)))
+
 
         # MAKE SURE THE EDGE PROP EXISTS
         if data.source not in self.database:
@@ -100,7 +117,12 @@ class storage_worker(skeleton):
         # PUSH IT TO DB
         self.database[data.source].append(entry)
 
-        self.log('ACTION:\t\tANOMALIES STORED')
+        # LOG SUCCESS
+        self.log({
+            'message': 'Stored syslog anomalies',
+            'amount': len(data.payload.anomalies),
+            'caller': data.source,
+        })
 
 # BOOT UP WORKER
 launch(storage_worker)

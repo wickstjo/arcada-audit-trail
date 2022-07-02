@@ -1,4 +1,4 @@
-from utils.misc import load_yaml, wrapper, log, sleep, time_delta
+from utils.misc import load_yaml, wrapper, log, sleep, time_delta, formatted_timestamp, timestamp, save_yaml
 from utils.rabbit import create_instance
 import base64
 import hashlib
@@ -15,12 +15,48 @@ class skeleton:
         self.requests = {}
         self.links = {}
 
+        self.logger = {}
+
         # RUN PSEUDO CONSTRUCTOR FUNC
         self.created()
 
     # PSEUDO CONSTRUCTOR -- MUST BE OVERLOADED
-    def created(self):
+    def created(self, name, params):
         raise NotImplementedError
+
+    def init_logger(self, name, params):
+
+        # STITCH TOGETHER LOG FILE
+        now = int(timestamp())
+        self.log_file = 'logs/{}-{}.yml'.format(now, name)
+
+        # SAVE INIT CONFIG
+        details = { **params.raw() }
+        details['worker'] = name
+
+        # PUSH DATA
+        self.logger['details'] = details
+        self.logger['logs'] = {}
+        
+        # LOG WORKER START
+        self.log({
+            'message': '{} worker started'.format(name.capitalize())
+        })
+    
+    def log(self, params):
+        # entry = {**params}
+        # entry['timestamp'] = formatted_timestamp()
+        
+        # self.logger['logs'].append(entry)
+
+        now = formatted_timestamp()
+        self.logger['logs'][now] = params
+        
+        prefix = '[{}]'.format(now)
+        print(prefix, params['message'], flush=True)
+
+        # SAVE LOGFILE
+        save_yaml(self.log_file, self.logger)
     
     # GET RABBIT INSTANCE
     def get_instance(self, channel):
@@ -40,7 +76,10 @@ class skeleton:
         encoded = self.encode_data(message)
         instance.publish(channel, encoded)
 
-        log('PUSHED MESSAGE TO:\t' + channel)
+        self.log({
+            'message': 'Pushed message to channel',
+            'channel': channel
+        })
 
     # SUBSCRIBE TO RABBIT FEED
     def subscribe(self, channel):
@@ -49,15 +88,26 @@ class skeleton:
 
             # IF DECODING PROCESS WORKER OUT, CALL NEXT FUNC            
             if decoded:
-                log('VALID MSG FROM:\t' + decoded.source)
+                self.log({
+                    'message': 'Valid message received',
+                    'caller': decoded.source
+                })
                 
                 self.action(decoded)
                 print()
                 return
             
             # OTHERWISE, PRINT ERROR
-            log('INVALID MSG FROM:\t' + decoded.source)
-        log('SUBSCRIBED TO:\t' + channel)
+            self.log({
+                'message': 'Undecipherable message intercepted',
+                'caller': decoded.source
+            })
+
+        # LOG SUBSCRIPTION
+        self.log({
+            'message': 'Subscribed to channel feed',
+            'channel': channel
+        })
         print()
         
         # SAVE CONNECTION IN STATE
@@ -70,7 +120,11 @@ class skeleton:
         instance.cancel(channel)
         del self.rabbit[channel]
 
-        log('UNSUBSCRIBED FROM:\t' + channel)
+        # LOG ACTION
+        self.log({
+            'message': 'Unsubscribed from channel feed',
+            'channel': channel
+        })
 
     # ENCODE PAYLOAD
     def encode_data(self, data):
@@ -103,14 +157,23 @@ class skeleton:
     # ATTEMPT TO TRIGGER WORKER ACTION
     def action(self, data):
 
-        # IF THE ACTION EXISTS, RUN IT
-        if data.payload.action in self.actions:
-            log('ACTION TRIGGERED:\t' + data.payload.action)
-            self.actions[data.payload.action](data)
-            return
-        
-        # OTHERWISE, THROW ERROR
-        log('UNKNOWN ACTION:\t' + data.payload.action)
+        # ERROR, ACTION DOESNT EXIST
+        if data.payload.action not in self.actions:
+            return self.log({
+                'message': 'Unknown action trigger blocked',
+                'action': data.payload.action,
+                'caller': data.source
+            })
+
+        # ACTION EXISTS!
+        self.log({
+            'message': 'Action triggered',
+            'action': data.payload.action,
+            'caller': data.source
+        })
+
+        # CALL ACTION
+        self.actions[data.payload.action](data)
 
     # GENERATE EXECUTION 
     def hashify(self, data):
@@ -122,12 +185,20 @@ class skeleton:
 
         # ERROR, REQUEST SECRET DOES NOT EXIST
         if data.payload.secret not in self.requests:
-            log('ERROR:\t\t' + 'SECRET DOES NOT EXIST')
+            self.log({
+                'message': 'Unexistent secret',
+                'action': data.payload.action,
+                'caller': data.source
+            })
             return None
 
         # ERROR, REQUEST SOURCE NOT CORRECT
         if self.requests[data.payload.secret].source != data.source:
-            log('ERROR:\t\t' + 'REQUEST SECRET SOURCE IS INCORRECT')
+            self.log({
+                'message': 'Incorrect secret',
+                'action': data.payload.action,
+                'caller': data.source
+            })
             return None
 
         # COMPUTE TIME DELTA & DELETE THE REQUEST

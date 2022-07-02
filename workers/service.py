@@ -3,7 +3,9 @@ from utils.misc import log, create_secret, wrapper, find_closest, timestamp
 
 class service_worker(skeleton):
     def created(self):
-        self.log('STARTUP:\t\t' + 'SERVICE WORKER')
+
+        # INITIALIZE LOGGER
+        self.init_logger('service', self.config.service)
 
         # DEVICE COLLECTIONS
         self.storage_collection = {}
@@ -40,7 +42,10 @@ class service_worker(skeleton):
         })
 
         # LOG SUCCESS
-        self.log('SUCCESS:\t\t' + 'STORAGE DEVICE CREATED')
+        self.log({
+            'message': 'Storage device created',
+            'device': data.source
+        })
 
     # PERFORM EDGE HANDSHAKE
     def edge_handshake(self, data):
@@ -53,7 +58,9 @@ class service_worker(skeleton):
 
         # ERROR, NO STORAGE DEVICES EXIST
         if not response:
-            self.log('ERROR:\t\t' + 'NO STORAGE DEVICES FOUND')
+            self.log({
+                'message': 'No storage devices found',
+            })
 
             return self.publish(data.source, {
                 'source': self.config.service.keys.public,
@@ -94,7 +101,11 @@ class service_worker(skeleton):
         })
 
         # LOG SUCCESS
-        self.log('SUCCESS:\t\t' + 'EDGE => STORAGE LINK ESTABLISHED')
+        self.log({
+            'message': 'Relationship link created',
+            'edge': data.source,
+            'storage': response.node
+        })
 
     # PERFORM IOT HANDSHAKE
     def iot_handshake(self, data):
@@ -107,7 +118,9 @@ class service_worker(skeleton):
 
         # ERROR, NO EDGE DEVICES EXIST
         if not response:
-            self.log('ERROR:\t\t' + 'NO EDGE DEVICES FOUND')
+            self.log({
+                'message': 'No edge devices found',
+            })
 
             return self.publish(data.source, {
                 'source': self.config.service.keys.public,
@@ -115,6 +128,7 @@ class service_worker(skeleton):
                     'action': 'handshake_response',
                     'success': False,
                     'reason': 'No edge devices found',
+                    'secret': data.payload.secret,
                 }
             })
 
@@ -124,7 +138,8 @@ class service_worker(skeleton):
             'payload': {
                 'action': 'iot_link',
                 'iot': data.source,
-                'distance': response.distance
+                'distance': response.distance,
+                'secret': data.payload.secret,
             }
         })
 
@@ -135,12 +150,17 @@ class service_worker(skeleton):
                 'action': 'handshake_response',
                 'success': True,
                 'edge': response.node,
-                'distance': response.distance
+                'distance': response.distance,
+                'secret': data.payload.secret,
             }
         })
 
         # LOG SUCCESS
-        self.log('SUCCESS:\t\t' + 'IOT => EDGE LINK ESTABLISHED')
+        self.log({
+            'message': 'Relationship link created',
+            'iot': data.source,
+            'edge': response.node
+        })
 
 # BOOT UP WORKER
 launch(service_worker)

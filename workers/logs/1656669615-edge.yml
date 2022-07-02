@@ -1,0 +1,189 @@
+details:
+    keys:
+        public: edge-c5eef93df4995b963f64eae65e541b86
+        private: edge-private
+    type: anomaly-detection
+    location:
+        x: 5
+        y: 1
+    worker: edge
+logs:
+    13:00:15:064049:
+        message: Edge worker started
+    13:00:16:085941:
+        message: Pushed message to channel
+        channel: service-1fa6577ab3354348fe05140435e791bb
+    13:00:16:089995:
+        message: Subscribed to channel feed
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:18:125655:
+        message: Valid message received
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:18:131530:
+        message: Action triggered
+        action: handshake_response
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:18:137889:
+        message: Handshake process completed
+        turnaround: 2.0479
+    13:00:19:644919:
+        message: Valid message received
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:19:646677:
+        message: Action triggered
+        action: iot_link
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:19:650144:
+        message: IOT relationship link created
+        iot: 5.0
+        distance: 5.0
+    13:00:23:701119:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:23:711635:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:23:722601:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 6
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:24:748463:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:26:721457:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:26:728244:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:26:731111:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 11
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:27:735120:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:29:734048:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:29:739968:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:29:744060:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 11
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:30:750298:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:32:746082:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:32:752458:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:32:756911:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 8
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:33:763074:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:35:757833:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:35:781450:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:35:794048:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 9
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:36:804538:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:38:794167:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:38:819340:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:38:831786:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 8
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:39:842498:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:41:828562:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:41:837230:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:41:844113:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 12
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:42:852771:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:44:843794:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:44:873883:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:44:886651:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 12
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:45:897251:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:47:881856:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:47:915970:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:47:930829:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 7
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:48:942479:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:50:922649:
+        message: Valid message received
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:50:957009:
+        message: Action triggered
+        action: log_dump
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:50:971882:
+        message: Parsed syslogs from iot
+        rows: 20
+        anomalies: 9
+        caller: iot-3256e45e565478c9381d8fe77137f164
+    13:00:51:983063:
+        message: Pushed message to channel
+        channel: storage-77e740391bc1655b3438ddbb04a06960

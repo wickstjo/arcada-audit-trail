@@ -1,0 +1,149 @@
+details:
+    keys:
+        public: storage-77e740391bc1655b3438ddbb04a06960
+        private: storage-private
+    type: syslog-storage
+    location:
+        x: 5
+        y: 5
+    worker: storage
+logs:
+    13:00:10:341522:
+        message: Storage worker started
+    13:00:11:351282:
+        message: Pushed message to channel
+        channel: service-1fa6577ab3354348fe05140435e791bb
+    13:00:11:352737:
+        message: Subscribed to channel feed
+        channel: storage-77e740391bc1655b3438ddbb04a06960
+    13:00:12:371339:
+        message: Valid message received
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:12:376672:
+        message: Action triggered
+        action: handshake_response
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:12:378111:
+        message: Handshake process completed
+        turnaround: 1.0254
+    13:00:17:105875:
+        message: Valid message received
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:17:109545:
+        message: Action triggered
+        action: edge_link
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:17:111491:
+        message: Edge relationship link created
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        distance: 4.0
+    13:00:24:750191:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:24:760790:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:24:772158:
+        message: Stored syslog anomalies
+        amount: 6
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:27:736772:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:27:742098:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:27:747152:
+        message: Stored syslog anomalies
+        amount: 11
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:30:751962:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:30:757688:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:30:763054:
+        message: Stored syslog anomalies
+        amount: 11
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:33:764530:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:33:770975:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:33:776282:
+        message: Stored syslog anomalies
+        amount: 8
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:36:806007:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:36:826413:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:36:842981:
+        message: Stored syslog anomalies
+        amount: 9
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:39:843973:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:39:870051:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:39:883760:
+        message: Stored syslog anomalies
+        amount: 8
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:42:854293:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:42:881292:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:42:894777:
+        message: Stored syslog anomalies
+        amount: 12
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:45:897803:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:45:904275:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:45:913290:
+        message: Stored syslog anomalies
+        amount: 12
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:48:942995:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:48:949780:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:48:956920:
+        message: Stored syslog anomalies
+        amount: 7
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:51:984558:
+        message: Valid message received
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:52:015154:
+        message: Action triggered
+        action: store_anomalies
+        caller: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:52:029317:
+        message: Stored syslog anomalies
+        amount: 9
+        caller: edge-c5eef93df4995b963f64eae65e541b86

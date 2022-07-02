@@ -11,6 +11,11 @@ def load_yaml(path):
         data = yaml.load(file, Loader=yaml.FullLoader)
         return wrapper(data)
 
+# SAVE YAML FILE
+def save_yaml(path, data):
+    with open(path, 'w') as file:
+        yaml.dump(data, file, sort_keys=False, indent=4)
+
 # WRAP DICT INTO A EASIER TO USE CLASS
 class wrapper:
     def __init__(self, data_dict):
@@ -41,6 +46,9 @@ def log(msg):
     now = datetime.now().strftime("%H:%M:%S:%f")
     prefix = '[{}]'.format(now)
     print(prefix, msg, flush=True)
+
+def formatted_timestamp():
+    return datetime.now().strftime("%H:%M:%S:%f")
 
 # GENERATE RANDOM BITS OF DATA
 def create_secret(length):

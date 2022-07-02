@@ -1,0 +1,98 @@
+details:
+    keys:
+        public: iot-3256e45e565478c9381d8fe77137f164
+        private: iot-private
+    location:
+        x: 8
+        y: 5
+    worker: iot
+logs:
+    13:00:17:593464:
+        message: Iot worker started
+    13:00:18:616286:
+        message: Pushed message to channel
+        channel: service-1fa6577ab3354348fe05140435e791bb
+    13:00:18:620202:
+        message: Subscribed to channel feed
+        channel: iot-3256e45e565478c9381d8fe77137f164
+    13:00:20:663566:
+        message: Valid message received
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:20:669130:
+        message: Action triggered
+        action: handshake_response
+        caller: service-1fa6577ab3354348fe05140435e791bb
+    13:00:20:675284:
+        message: Handshake process completed
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        turnaround: 2.0551
+    13:00:23:699476:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:23:707453:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:26:719726:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:26:726672:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:29:732365:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:29:738514:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:32:744374:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:32:750774:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:35:756393:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:35:774384:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:38:792571:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:38:810565:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:41:827052:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:41:834277:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:44:842236:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:44:863481:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:47:880413:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:47:901081:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
+    13:00:50:920849:
+        message: Pushed message to channel
+        channel: edge-c5eef93df4995b963f64eae65e541b86
+    13:00:50:943507:
+        message: Submitted log batch to edge
+        edge: edge-c5eef93df4995b963f64eae65e541b86
+        rows: 20
