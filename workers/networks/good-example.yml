@@ -1,0 +1,152 @@
+config:
+    iots: 20
+    edges: 5
+    verifiers: 3
+    storages: 3
+    grid_size: 10
+#
+# COMMENT OUT STORAGE 4 AND EDGE 6
+# THESE SHOULD REPLACE EDGE 2 AND STORAGE 3 WHICH ARE USELESS
+#
+nodes:
+    service:
+    -   name: service
+        location:
+            x: 4.138194686572835
+            y: 4.007544716371175
+    verifier:
+    -   name: verifier-1
+        location:
+            x: 6.71875914099311
+            y: 1.9459913949502918
+    -   name: verifier-2
+        location:
+            x: 0.6317581571709655
+            y: 6.99466520468485
+    -   name: verifier-3
+        location:
+            x: 3.977905693838837
+            y: 6.110066249547548
+    storage:
+    -   name: storage-1
+        location:
+            x: 6.71798097989161
+            y: 6.112530805149934
+    -   name: storage-2
+        location:
+            x: 2.0138786951993293
+            y: 8.741085139336624
+    -   name: storage-3
+        location:
+            x: 4.622274093614953
+            y: 8.271839828024513
+    -   name: storage-4
+        location:
+            x: 1.122274093614953
+            y: 3.971839828024513
+    edge:
+    -   name: edge-1
+        location:
+            x: 9.489780616726772
+            y: 4.717075580641001
+    -   name: edge-2
+        location:
+            x: 5.273761767439127
+            y: 9.188761502703
+    -   name: edge-3
+        location:
+            x: 2.6199593532869905
+            y: 7.205559825062246
+    -   name: edge-4
+        location:
+            x: 6.588780294363616
+            y: 3.745762360597495
+    -   name: edge-5
+        location:
+            x: 6.932296926888718
+            y: 7.669277974061882
+    -   name: edge-6
+        location:
+            x: 2.5
+            y: 2.5
+    iot:
+    -   name: iot-1
+        location:
+            x: 7.827481358995631
+            y: 3.5601993202606783
+    -   name: iot-2
+        location:
+            x: 2.74802425513793
+            y: 8.565775854094944
+    -   name: iot-3
+        location:
+            x: 9.449270321405132
+            y: 5.516962993022137
+    -   name: iot-4
+        location:
+            x: 1.9704725304205467
+            y: 7.307810904315406
+    -   name: iot-5
+        location:
+            x: 8.353645085301956
+            y: 1.9781833552981638
+    -   name: iot-6
+        location:
+            x: 4.473701574580862
+            y: 1.4925525332006648
+    -   name: iot-7
+        location:
+            x: 2.1135220386589257
+            y: 1.146145502549909
+    -   name: iot-8
+        location:
+            x: 5.5801537335713585
+            y: 4.1751937741645175
+    -   name: iot-9
+        location:
+            x: 0.7545822136370598
+            y: 5.761641474330396
+    -   name: iot-10
+        location:
+            x: 8.21281517720351
+            y: 8.075220851020635
+    -   name: iot-11
+        location:
+            x: 0.8792062529216007
+            y: 2.3558645665082203
+    -   name: iot-12
+        location:
+            x: 5.972268465269872
+            y: 0.7875251285112048
+    -   name: iot-13
+        location:
+            x: 9.015542899809123
+            y: 7.958985940268585
+    -   name: iot-14
+        location:
+            x: 7.220457546388232
+            y: 0.7544211525193361
+    -   name: iot-15
+        location:
+            x: 4.150304485719612
+            y: 3.0098184417914804
+    -   name: iot-16
+        location:
+            x: 7.2793982164744
+            y: 9.201744986433555
+    -   name: iot-17
+        location:
+            x: 2.9116990291772717
+            y: 4.007459313587217
+    -   name: iot-18
+        location:
+            x: 1.9575528004672379
+            y: 6.1169164340758725
+    -   name: iot-19
+        location:
+            x: 2.483500364474734
+            y: 0.6376432739534178
+    -   name: iot-20
+        location:
+            x: 3.950806496202487
+            y: 1.9844713071383144
