@@ -1,0 +1,390 @@
+!!python/object:workers.utils.misc.wrapper
+data_dict:
+    config: &id036
+        iot_count: 20
+        edge_count: 5
+        verifier_count: 3
+        grid_size: 10
+    nodes: &id037
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: service
+            location: &id001
+                x: 6.973832808157116
+                y: 8.299184571704387
+        type: service
+        location: &id002 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id001
+            x: 6.973832808157116
+            y: 8.299184571704387
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: edge
+            location: &id003
+                x: 0.6101045173140287
+                y: 8.505840029828649
+            connector: *id002
+        type: edge
+        location: &id022 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id003
+            x: 0.6101045173140287
+            y: 8.505840029828649
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: edge
+            location: &id004
+                x: 8.683705360777887
+                y: 2.1468105954051295
+            connector: *id002
+        type: edge
+        location: &id014 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id004
+            x: 8.683705360777887
+            y: 2.1468105954051295
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: edge
+            location: &id005
+                x: 8.950406750281525
+                y: 8.619827863949078
+            connector: *id002
+        type: edge
+        location: &id008 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id005
+            x: 8.950406750281525
+            y: 8.619827863949078
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: edge
+            location: &id006
+                x: 3.8239805392628297
+                y: 2.219179219660097
+            connector: *id002
+        type: edge
+        location: &id010 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id006
+            x: 3.8239805392628297
+            y: 2.219179219660097
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: edge
+            location: &id007
+                x: 4.327520466853141
+                y: 1.1610891368041136
+            connector: *id002
+        type: edge
+        location: &id016 !!python/object:workers.utils.misc.wrapper
+            data_dict: *id007
+            x: 4.327520466853141
+            y: 1.1610891368041136
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id009
+                x: 6.9210271027096955
+                y: 5.6027521086359275
+            connector: *id008
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id009
+            x: 6.9210271027096955
+            y: 5.6027521086359275
+        connector: *id008
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id011
+                x: 5.999362836926534
+                y: 5.440656112542387
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id011
+            x: 5.999362836926534
+            y: 5.440656112542387
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id012
+                x: 2.3220823849568006
+                y: 2.8987471361957726
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id012
+            x: 2.3220823849568006
+            y: 2.8987471361957726
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id013
+                x: 5.79835765872806
+                y: 5.827915905110631
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id013
+            x: 5.79835765872806
+            y: 5.827915905110631
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id015
+                x: 8.941176428673941
+                y: 4.293230917291146
+            connector: *id014
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id015
+            x: 8.941176428673941
+            y: 4.293230917291146
+        connector: *id014
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id017
+                x: 5.81093655929822
+                y: 2.356575585569489
+            connector: *id016
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id017
+            x: 5.81093655929822
+            y: 2.356575585569489
+        connector: *id016
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id018
+                x: 4.2336219592639885
+                y: 6.2813642404176795
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id018
+            x: 4.2336219592639885
+            y: 6.2813642404176795
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id019
+                x: 1.7083290675469085
+                y: 4.304223287689505
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id019
+            x: 1.7083290675469085
+            y: 4.304223287689505
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id020
+                x: 6.092616776873151
+                y: 4.060759489328911
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id020
+            x: 6.092616776873151
+            y: 4.060759489328911
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id021
+                x: 6.764122247740778
+                y: 2.550096081122769
+            connector: *id014
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id021
+            x: 6.764122247740778
+            y: 2.550096081122769
+        connector: *id014
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id023
+                x: 4.290353743220908
+                y: 7.0345883799865465
+            connector: *id022
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id023
+            x: 4.290353743220908
+            y: 7.0345883799865465
+        connector: *id022
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id024
+                x: 1.9638239392524346
+                y: 5.2379365466000305
+            connector: *id022
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id024
+            x: 1.9638239392524346
+            y: 5.2379365466000305
+        connector: *id022
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id025
+                x: 1.9206122983826124
+                y: 3.0533890512527764
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id025
+            x: 1.9206122983826124
+            y: 3.0533890512527764
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id026
+                x: 7.306528599169509
+                y: 5.635349443723936
+            connector: *id008
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id026
+            x: 7.306528599169509
+            y: 5.635349443723936
+        connector: *id008
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id027
+                x: 1.0391686297689104
+                y: 1.5998898789618048
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id027
+            x: 1.0391686297689104
+            y: 1.5998898789618048
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id028
+                x: 3.6065706636653716
+                y: 3.456625462079226
+            connector: *id010
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id028
+            x: 3.6065706636653716
+            y: 3.456625462079226
+        connector: *id010
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id029
+                x: 0.8434343510081085
+                y: 7.929818494615385
+            connector: *id022
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id029
+            x: 0.8434343510081085
+            y: 7.929818494615385
+        connector: *id022
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id030
+                x: 6.515772695941017
+                y: 4.877661725059758
+            connector: *id014
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id030
+            x: 6.515772695941017
+            y: 4.877661725059758
+        connector: *id014
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id031
+                x: 4.753515778892809
+                y: 8.080762663621778
+            connector: *id022
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id031
+            x: 4.753515778892809
+            y: 8.080762663621778
+        connector: *id022
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: iot
+            location: &id032
+                x: 6.63121056883556
+                y: 6.77553658875758
+            connector: *id008
+        type: iot
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id032
+            x: 6.63121056883556
+            y: 6.77553658875758
+        connector: *id008
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: verifier
+            location: &id033
+                x: 8.657900263636547
+                y: 6.532703838601474
+            connector: *id002
+        type: verifier
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id033
+            x: 8.657900263636547
+            y: 6.532703838601474
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: verifier
+            location: &id034
+                x: 7.813369367358952
+                y: 7.527396000664497
+            connector: *id002
+        type: verifier
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id034
+            x: 7.813369367358952
+            y: 7.527396000664497
+        connector: *id002
+    - !!python/object:workers.utils.misc.wrapper
+        data_dict:
+            type: verifier
+            location: &id035
+                x: 4.099198396420977
+                y: 9.137279536580095
+            connector: *id002
+        type: verifier
+        location: !!python/object:workers.utils.misc.wrapper
+            data_dict: *id035
+            x: 4.099198396420977
+            y: 9.137279536580095
+        connector: *id002
+config: !!python/object:workers.utils.misc.wrapper
+    data_dict: *id036
+    iot_count: 20
+    edge_count: 5
+    verifier_count: 3
+    grid_size: 10
+nodes: *id037

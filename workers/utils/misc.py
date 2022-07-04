@@ -25,8 +25,16 @@ class wrapper:
     # POPULATE INSTANCE PROPS
     def populate(self, data):
         for key in data:
+            
+            # PARSE DICTS
             if type(data[key]) == dict:
                 setattr(self, key, wrapper(data[key]))
+            
+            # PARSE LISTS
+            if type(data[key]) == list:
+                setattr(self, key, [wrapper(item) for item in data[key]])
+
+            # PARSE REST
             else:
                 setattr(self, key, data[key])
 

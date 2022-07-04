@@ -9,6 +9,14 @@ services:
             - 5672:5672
             - 15672:15672
 
+    # IN-MEMORY BLOCKCHAIN
+    blockchain:
+        image: trufflesuite/ganache:latest
+        command: --deterministic --secure --unlock 0
+        restart: always
+        ports:
+            - 8545:8545
+
     # # SERVICE WORKER
     # service_worker:
     #     build:

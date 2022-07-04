@@ -1,0 +1,188 @@
+config:
+    iot_count: 20
+    edge_count: 5
+    verifier_count: 3
+    storage_count: 2
+    grid_size: 10
+nodes:
+-   type: service
+    location: &id001
+        x: 5.274783508510026
+        y: 4.107936928927703
+    connectors: []
+-   type: storage
+    location: &id009
+        x: 4.3687286993712492
+        y: 2.1820100857238605
+-   type: storage
+    location: &id002
+        x: 5.364568046565426
+        y: 8.233183340180881
+-   type: edge
+    location: &id006
+        x: 3.825107527930603
+        y: 6.433824082343104
+    connectors:
+    - *id002
+-   type: edge
+    location: &id007
+        x: 5.075461954695992
+        y: 6.545445091265234
+    connectors:
+    - *id002
+-   type: edge
+    location: &id003
+        x: 6.9043730323746315
+        y: 7.905472033801128
+    connectors:
+    - *id002
+-   type: edge
+    location: &id005
+        x: 7.0067435391994435
+        y: 2.661252852904286
+    connectors:
+    - *id009
+-   type: edge
+    location: &id004
+        x: 7.121367067557687
+        y: 3.2971549932117514
+    connectors:
+    - *id009
+-   type: iot
+    location:
+        x: 6.85837753775944
+        y: 6.397851890150581
+    connectors:
+    - *id003
+-   type: iot
+    location:
+        x: 9.27903789239283
+        y: 2.742527333045122
+    connectors:
+    - *id004
+-   type: iot
+    location:
+        x: 8.209828012515846
+        y: 1.9060391303339794
+    connectors:
+    - *id005
+-   type: iot
+    location:
+        x: 7.027735877189673
+        y: 1.3228618037747366
+    connectors:
+    - *id005
+-   type: iot
+    location:
+        x: 5.0261330059918565
+        y: 9.05324899811054
+    connectors:
+    - *id003
+-   type: iot
+    location:
+        x: 1.07347512272264
+        y: 1.7434237256358462
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 6.340591478793385
+        y: 3.8780752855625096
+    connectors:
+    - *id004
+-   type: iot
+    location:
+        x: 1.3520816828273032
+        y: 4.940538585186333
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 2.0428831980885267
+        y: 3.8466390413690377
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 1.9726542030962764
+        y: 0.9080181806216552
+    connectors:
+    - *id005
+-   type: iot
+    location:
+        x: 9.103005966293043
+        y: 5.974040308329339
+    connectors:
+    - *id003
+-   type: iot
+    location:
+        x: 5.199329281707741
+        y: 5.451693260568591
+    connectors:
+    - *id007
+-   type: iot
+    location:
+        x: 0.5762113744870788
+        y: 6.876563828686171
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 5.4514035727824144
+        y: 5.92597677425147
+    connectors:
+    - *id007
+-   type: iot
+    location:
+        x: 4.0054940328671105
+        y: 3.737400825980329
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 1.6653483005801497
+        y: 8.23288758911813
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 4.545810129381101
+        y: 2.8729531864047932
+    connectors:
+    - *id005
+-   type: iot
+    location:
+        x: 6.917851098709519
+        y: 9.093306172365287
+    connectors:
+    - *id003
+-   type: iot
+    location:
+        x: 0.9386309124736445
+        y: 8.324857496342469
+    connectors:
+    - *id006
+-   type: iot
+    location:
+        x: 7.378784585106292
+        y: 6.524445352469305
+    connectors:
+    - *id003
+-   type: verifier
+    location:
+        x: 4.384621779824423
+        y: 8.14351243748196
+    connectors:
+    - *id001
+-   type: verifier
+    location:
+        x: 2.702716092214501
+        y: 2.5124263225100476
+    connectors:
+    - *id001
+-   type: verifier
+    location:
+        x: 6.209879569518584
+        y: 7.3552216974346365
+    connectors:
+    - *id001

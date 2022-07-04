@@ -26,7 +26,41 @@ and potential future leaks.
     - Kafka.
     - MQTT.
     - Whisper.
-- 
+
+-------------------------------------------------------------------------------
+
+- Verifiers could be owned by the service, or standalone.
+- Need to sign-up via service.
+- Required to be online and respond quickly.
+    - Could be some form of reward structure.
+    - With penalties of course.
+
+- Service remains alive if some verifiers fall.
+- Require majority (quorum vote)
+- Resistant to malicious action due to number of verifiers.
+- Updated could be made one-by-one without taking the system down.
+
+- Communicate via MQTT.
+- End to end encrypted of course.
+- Use nonce for freshness.
+
+-------------------------------------------------------------------------------
+
+- Blockchain purists might want not like this setup.
+- Being a blockchain purists is unfeasible due to the multitude of unrealistic systems.
+
+- Instead of trying to trying to hide communications
+- Leverage the properties of NP-hardness combined with good design decisions.
+- Avoid having one central point of failure for any component.
+    - Some form of trust towards the system must exist.
+- Make it as mathematically difficult as needed to 
+- Assume a breach will eventually occur, and limit exposure wherever possible.
+
+
+
+
+
+
 
 
 
