@@ -36,11 +36,11 @@ nodes:
         location:
             x: 2.0138786951993293
             y: 8.741085139336624
+    # -   name: storage-3
+    #     location:
+    #         x: 4.622274093614953
+    #         y: 8.271839828024513
     -   name: storage-3
-        location:
-            x: 4.622274093614953
-            y: 8.271839828024513
-    -   name: storage-4
         location:
             x: 1.122274093614953
             y: 3.971839828024513
@@ -49,10 +49,14 @@ nodes:
         location:
             x: 9.489780616726772
             y: 4.717075580641001
+    # -   name: edge-2
+    #     location:
+    #         x: 5.273761767439127
+    #         y: 9.188761502703
     -   name: edge-2
         location:
-            x: 5.273761767439127
-            y: 9.188761502703
+            x: 2.5
+            y: 2.5
     -   name: edge-3
         location:
             x: 2.6199593532869905
@@ -65,10 +69,6 @@ nodes:
         location:
             x: 6.932296926888718
             y: 7.669277974061882
-    -   name: edge-6
-        location:
-            x: 2.5
-            y: 2.5
     iot:
     -   name: iot-1
         location:
