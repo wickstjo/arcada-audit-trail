@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+    
+    # IN MEMORY BLOCKCHAIN
+    mem_blockchain:
+        image: node:latest
+        restart: always
+        ports:
+            - 3000:8545
+        command: bash -c "
+                npm install -g ganache &&
+                ganache --server.port 8545 --server.host 0.0.0.0 --server.ws --deterministic --secure --unlock 0
+            "
